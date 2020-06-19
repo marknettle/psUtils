@@ -36,14 +36,16 @@ function Group-ObjectMulti
             $i++
         }
         $columns = ,"Count"+$columns
-        $_objects = @()
+        if ($WithElement) { $columns = $columns+"Group"}
+        $objects = @()
     }
 
     process {
-        $_objects += $InputObject
+        $objects += $InputObject
     }
 
     end {
-        $_objects | Group-Object -Property $Property -NoElement:(!$WithElement) | Select-Object $columns
+        $objects | Group-Object -Property $Property -NoElement:(!$WithElement) | Select-Object $columns
+        $columns | Format-Table | Out-String | Write-Verbose
     }
 }
